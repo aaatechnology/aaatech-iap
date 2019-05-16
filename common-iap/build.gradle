@@ -1,0 +1,47 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.minAppSdkVersion
+        targetSdkVersion rootProject.ext.targetAppSdkVersion
+        versionCode rootProject.ext.appVersionCode
+        versionName rootProject.ext.appVersionName
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+}
+
+ext {
+    bintrayRepo = 'maven' // your repo name
+    bintrayName = 'common-iap' // has to be same as your library module name
+    publishedGroupId = 'com.aaatech' // your module package name
+    libraryName = 'common-iap'
+    artifact = 'common-iap' // has to be same as your library module name
+    libraryDescription = 'Common iap'
+    siteUrl = 'https://github.com/aaatechnology/aaatech-iap'
+    gitUrl = 'https://github.com/aaatechnology/aaatech-iap.git'
+    libraryVersion = rootProject.ext.appVersionName
+    developerId = 'aaatech'
+    developerName = 'AAATech'
+    developerEmail = 'aaatech2014@gmail.com'
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+    //./gradlew clean build install bintrayUpload
+}
+
+apply from: 'https://raw.githubusercontent.com/numetriclabz/jcenter/master/installv.gradle'
+apply from: 'https://raw.githubusercontent.com/numetriclabz/jcenter/master/bintrayv.gradle'

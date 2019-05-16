@@ -1,0 +1,35 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+
+    defaultConfig {
+        applicationId rootProject.ext.appId
+        minSdkVersion rootProject.ext.minAppSdkVersion
+        targetSdkVersion rootProject.ext.targetAppSdkVersion
+        versionCode rootProject.ext.appVersionCode
+        versionName rootProject.ext.appVersionName
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation "com.android.support:appcompat-v7:${supportLibVersion}"
+    implementation "com.android.support.constraint:constraint-layout:${constraintVersion}"
+    //implementation project(path: ':common-iap')
+    implementation 'com.aaatech:common-iap:0.0.1'
+
+    testImplementation "junit:junit:${junitVersion}"
+    androidTestImplementation "com.android.support.test:runner:${testRunnerVersion}"
+    androidTestImplementation "com.android.support.test.espresso:espresso-core:${espressoCoreVersion}"
+}
