@@ -24,24 +24,47 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 }
 
-ext {
-    bintrayRepo = 'maven' // your repo name
-    bintrayName = 'common-iap' // has to be same as your library module name
-    publishedGroupId = 'com.aaatech' // your module package name
-    libraryName = 'common-iap'
-    artifact = 'common-iap' // has to be same as your library module name
-    libraryDescription = 'Common iap'
-    siteUrl = 'https://github.com/aaatechnology/aaatech-iap'
-    gitUrl = 'https://github.com/aaatechnology/aaatech-iap.git'
-    libraryVersion = rootProject.ext.appVersionName
-    developerId = 'aaatech'
-    developerName = 'AAATech'
-    developerEmail = 'aaatech2014@gmail.com'
-    licenseName = 'The Apache Software License, Version 2.0'
-    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-    allLicenses = ["Apache-2.0"]
-    //./gradlew clean build install bintrayUpload
+apply plugin: 'maven-publish' // Apply this plugin at the top of your library build.gradle
+
+def githubProperties = new Properties()
+githubProperties.load(new FileInputStream(rootProject.file("github.properties"))) //Set env variable GPR_USER & GPR_API_KEY if not adding a properties file
+
+def getVersionName = { ->
+    return "0.1.0" // Replace with version Name
 }
 
-apply from: 'https://raw.githubusercontent.com/numetriclabz/jcenter/master/installv.gradle'
-apply from: 'https://raw.githubusercontent.com/numetriclabz/jcenter/master/bintrayv.gradle'
+def getArtificatId = { ->
+    return "common-iap" // Replace with library name ID
+}
+
+publishing {
+    publications {
+        bar(MavenPublication) {
+            groupId 'com.aaatech' // Replace with group ID
+            artifactId getArtificatId()
+            version getVersionName()
+            artifact("$buildDir/outputs/aar/${getArtificatId()}-release.aar")
+        }
+    }
+
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            /** Configure path of your package repository on Github
+             ** Replace GITHUB_USERID with your/organisation Github userID
+             ** and REPOSITORY with the repository name on GitHub
+             */
+            url = uri("https://maven.pkg.github.com/aaatechnology/aaatech-iap")
+            credentials {
+                /** Create github.properties in root project folder file with
+                 ** gpr.usr=GITHUB_USER_ID & gpr.key=PERSONAL_ACCESS_TOKEN
+                 ** Set env variable GPR_USER & GPR_API_KEY if not adding a properties file**/
+
+                username = githubProperties['gpr.usr'] ?: System.getenv("GPR_USER")
+                password = githubProperties['gpr.key'] ?: System.getenv("GPR_API_KEY")
+            }
+        }
+    }
+}
+
+// ./gradlew common-iap:clean && ./gradlew common-iap:assemble && ./gradlew common-iap:publish
