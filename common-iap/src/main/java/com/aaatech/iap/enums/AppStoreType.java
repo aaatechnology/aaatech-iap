@@ -7,6 +7,7 @@ package com.aaatech.iap.enums;
  * <li> {@link #PLAY_STORE} </li>
  */
 public enum AppStoreType {
+
 	/**
 	 * Google Play AppStore
 	 */
